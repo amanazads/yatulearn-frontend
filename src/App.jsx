@@ -1,4 +1,3 @@
-
 import React from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -25,6 +24,8 @@ import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
 import Paper from "./pages/paper/Paper";
 import Construction from "./pages/construction/Construction";
+import WebDev from "./pages/explorecontent/WebDev";
+import DSA from "./pages/explorecontent/DSA";
 
 const App = () => {
   const { isAuth, user, loading } = UserData();
@@ -39,8 +40,15 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/courses" element={<Courses />} />
-            <Route path="/paper" element={isAuth ? <Paper/> : <Login />} />
-            <Route path="/construction" element={isAuth ? <Construction/> : <Login />} />
+            <Route path="/paper" element={isAuth ? <Paper /> : <Login />} />
+
+            <Route path="/webdev" element={isAuth ? <WebDev /> : <Login />} />
+            <Route path="/dsa" element={isAuth ? <DSA /> : <Login />} />
+
+            <Route
+              path="/construction"
+              element={isAuth ? <Construction /> : <Login />}
+            />
             <Route
               path="/account"
               element={isAuth ? <Account user={user} /> : <Login />}

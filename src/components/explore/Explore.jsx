@@ -6,8 +6,8 @@ const Explore = () => {
   const navigate = useNavigate();
 
   const courses = [
-    { title: "Web Development", gradient: "linear-gradient(135deg,#89f7fe,#66a6ff)", link: "/course/study/68bab873218bdad25a9d5965" },
-    { title: "Data Structure & Algorithm", gradient: "linear-gradient(135deg,#f6d365,#fda085)", link: "/courses/dsa" },
+    { title: "Web Development", gradient: "linear-gradient(135deg,#89f7fe,#66a6ff)", link: "/webdev" },
+    { title: "Data Structure & Algorithm", gradient: "linear-gradient(135deg,#f6d365,#fda085)", link: "/dsa" },
     { title: "Artificial Intelligence & Machine Learning", gradient: "linear-gradient(135deg,#a1c4fd,#c2e9fb)", link: "/courses/ai-ml" },
     { title: "Cyber Security", gradient: "linear-gradient(135deg,#84fab0,#8fd3f4)", link: "/courses/cyber-security" },
     { title: "Operating System", gradient: "linear-gradient(135deg,#fccb90,#d57eeb)", link: "/courses/operating-system" },
