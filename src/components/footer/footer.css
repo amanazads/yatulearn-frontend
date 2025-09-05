@@ -1,0 +1,173 @@
+footer {
+  margin-top: 50px;
+  width: 100%;
+  background: linear-gradient(135deg, #2c2c54, #24243e, #302b63, #0f0c29);
+  color: #eaeaea;
+  font-family: "Inter", sans-serif;
+}
+
+
+.flex_align {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.box1 {
+  margin-top: 40px;
+  width: 100%;
+  letter-spacing: 0.01cm;
+  display: flex;
+  justify-content: space-evenly;
+  gap: 2rem;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+}
+
+.policy {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.policy a:hover {
+  color: #ffffff;
+}
+
+.same p {
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+.same a {
+  text-decoration: none;
+  color: #b5b5b5;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.same > a:hover {
+  color: #ffffff;
+  transform: translateX(4px); /* modern slide hover */
+}
+
+/* Divider */
+.vertical_line {
+  border-left: none;
+  border: 0.5px solid #333;
+  height: 180px;
+  width: 0.009px;
+}
+
+.media {
+  margin-top: 40px;
+}
+
+.icon_flex {
+  height: 50px;
+  width: 100%;
+  font-size: 24px;
+  color: #b5b5b5;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.icon_flex a {
+  color: #b5b5b5;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.icon_flex a:hover {
+  color: #6c63ff; /* modern accent purple */
+  transform: scale(1.2);
+}
+
+.email_address {
+  color: #eaeaea;
+  line-height: 24px;
+  letter-spacing: 0.01cm;
+}
+
+.num {
+  color: #ffffff;
+  margin: 10px 0;
+  font-weight: 500;
+}
+
+.email_address a {
+  color: #b5b5b5;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.email_address a:hover {
+  color: #6c63ff;
+}
+
+/* Horizontal divider */
+.horizontal_line {
+  margin-top: 20px;
+  border: 0.1px solid #333;
+  border-top: none;
+  height: 0.000009px;
+  width: 100%;
+}
+
+/* Copyright */
+.copyright {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b5b5b5;
+  font-size: 14px;
+}
+
+.copyright p {
+  font-size: 14px;
+}
+
+/* 📱 Mobile Screens */
+@media (max-width: 768px) {
+  .box1 {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 2rem;
+  }
+
+  .vertical_line {
+    display: none; /* remove line on mobile */
+  }
+
+  .icon_flex {
+    justify-content: center;
+  }
+
+  .email_address {
+    text-align: center;
+  }
+}
+
+/* 📱 Very Small Screens */
+@media (max-width: 480px) {
+  .same a {
+    font-size: 13px;
+  }
+
+  .email_address {
+    font-size: 13px;
+    line-height: 20px;
+  }
+
+  .icon_flex {
+    font-size: 20px;
+    gap: 12px;
+  }
+}
