@@ -50,7 +50,7 @@ const About = () => {
       social: { twitter: "https://x.com/amanazads", github: "https://github.com/amanazads", linkedin: "https://linkedin.com/in/amanazads", instagram: "https://instagram.com/amanazads" },
     },
     {
-      name: "Yash Chobad",
+      name: "Yash Chichad",
       role: "Co-Founder & CTO",
       image: "../images/yashu.jpg",
       social: { linkedin: "https://www.linkedin.com/in/yash-chichad/", github: "https://github.com/programyash" },
