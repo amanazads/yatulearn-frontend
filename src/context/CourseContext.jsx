@@ -5,40 +5,52 @@ import { server } from "../main";
 const CourseContext = createContext();
 
 export const CourseContextProvider = ({ children }) => {
-  const [courses, setCourses] = useState([]);
-  const [course, setCourse] = useState([]);
-  const [mycourse, setMyCourse] = useState([]);
+  const [courses, setCourses] = useState([]);   // ✅ all courses
+  const [course, setCourse] = useState(null);   // ✅ single course
+  const [mycourse, setMyCourse] = useState([]); // ✅ enrolled courses
 
+  // 🔧 set default axios config once
+  axios.defaults.withCredentials = true;
+
+  // ✅ fetch all courses
   async function fetchCourses() {
     try {
       const { data } = await axios.get(`${server}/api/course/all`);
-
-      setCourses(data.courses);
+      setCourses(data.courses || []);
     } catch (error) {
-      console.log(error);
+      console.error("❌ Failed to fetch courses:", error.response?.data?.message || error.message);
+      setCourses([]);
     }
   }
 
+  // ✅ fetch single course detail
   async function fetchCourse(id) {
+    if (!id) return;
     try {
       const { data } = await axios.get(`${server}/api/course/${id}`);
-      setCourse(data.course);
+      setCourse(data.course || null);
     } catch (error) {
-      console.log(error);
+      console.error("❌ Failed to fetch course:", error.response?.data?.message || error.message);
+      setCourse(null);
     }
   }
 
+  // ✅ fetch my enrolled courses
   async function fetchMyCourse() {
-    try {
-      const { data } = await axios.get(`${server}/api/mycourse`, {
-        headers: {
-          token: localStorage.getItem("token"),
-        },
-      });
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setMyCourse([]);
+      return;
+    }
 
-      setMyCourse(data.courses);
+    try {
+      const { data } = await axios.get(`${server}/api/course/mycourse`, {
+        headers: { token },
+      });
+      setMyCourse(data.courses || []);
     } catch (error) {
-      console.log(error);
+      console.error("❌ Failed to fetch my courses:", error.response?.data?.message || error.message);
+      setMyCourse([]);
     }
   }
 
@@ -46,14 +58,15 @@ export const CourseContextProvider = ({ children }) => {
     fetchCourses();
     fetchMyCourse();
   }, []);
+
   return (
     <CourseContext.Provider
       value={{
         courses,
-        fetchCourses,
-        fetchCourse,
         course,
         mycourse,
+        fetchCourses,
+        fetchCourse,
         fetchMyCourse,
       }}
     >

@@ -1,113 +1,86 @@
-import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { createContext, useContext, useEffect, useState } from "react";
 import { server } from "../main";
-import toast, { Toaster } from "react-hot-toast";
 
 const UserContext = createContext();
 
 export const UserContextProvider = ({ children }) => {
-  const [user, setUser] = useState([]);
-  const [isAuth, setIsAuth] = useState(false);
-  const [btnLoading, setBtnLoading] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
 
-  async function loginUser(email, password, navigate, fetchMyCourse) {
-    setBtnLoading(true);
-    try {
-      const { data } = await axios.post(`${server}/api/user/login`, {
-        email,
-        password,
-      });
+  axios.defaults.withCredentials = true;
 
-      toast.success(data.message);
-      localStorage.setItem("token", data.token);
-      setUser(data.user);
-      setIsAuth(true);
-      setBtnLoading(false);
-      navigate("/");
-      fetchMyCourse();
-    } catch (error) {
-      setBtnLoading(false);
-      setIsAuth(false);
-      toast.error(error.response.data.message);
-    }
+  async function registerUser(formData) {
+    return await axios.post(`${server}/api/user/register`, formData);
   }
 
-  async function registerUser(name, email, password, navigate) {
-    setBtnLoading(true);
-    try {
-      const { data } = await axios.post(`${server}/api/user/register`, {
-        name,
-        email,
-        password,
-      });
-
-      toast.success(data.message);
-      localStorage.setItem("activationToken", data.activationToken);
-      setBtnLoading(false);
-      navigate("/verify");
-    } catch (error) {
-      setBtnLoading(false);
-      toast.error(error.response.data.message);
-    }
+  async function verifyUser(otpData) {
+    return await axios.post(`${server}/api/user/verify`, otpData);
   }
 
-  async function verifyOtp(otp, navigate) {
-    setBtnLoading(true);
-    const activationToken = localStorage.getItem("activationToken");
-    try {
-      const { data } = await axios.post(`${server}/api/user/verify`, {
-        otp,
-        activationToken,
-      });
-
-      toast.success(data.message);
-      navigate("/login");
-      localStorage.clear();
-      setBtnLoading(false);
-    } catch (error) {
-      toast.error(error.response.data.message);
-      setBtnLoading(false);
-    }
+  async function loginUser(credentials) {
+    const { data } = await axios.post(`${server}/api/user/login`, credentials);
+    setUser(data.user);
+    localStorage.setItem("token", data.token);
+    return data;
   }
 
-  async function fetchUser() {
+  async function fetchProfile() {
+    const token = localStorage.getItem("token");
+    if (!token) return setUser(null);
+
     try {
       const { data } = await axios.get(`${server}/api/user/me`, {
-        headers: {
-          token: localStorage.getItem("token"),
-        },
+        headers: { token },
       });
-
-      setIsAuth(true);
       setUser(data.user);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
+    } catch (err) {
+      console.error("Profile fetch failed:", err.response?.data?.message);
+      setUser(null);
     }
+  }
+
+  async function forgotPassword(email) {
+    return await axios.post(`${server}/api/user/forgot`, { email });
+  }
+
+  async function resetPassword(payload) {
+    return await axios.post(`${server}/api/user/reset`, payload);
+  }
+
+  async function addProgress(progressData) {
+    const token = localStorage.getItem("token");
+    return await axios.post(`${server}/api/user/progress`, progressData, {
+      headers: { token },
+    });
+  }
+
+  async function getProgress() {
+    const token = localStorage.getItem("token");
+    const { data } = await axios.get(`${server}/api/user/progress`, {
+      headers: { token },
+    });
+    return data.progress;
   }
 
   useEffect(() => {
-    fetchUser();
+    fetchProfile();
   }, []);
+
   return (
     <UserContext.Provider
       value={{
         user,
-        setUser,
-        setIsAuth,
-        isAuth,
-        loginUser,
-        btnLoading,
-        loading,
         registerUser,
-        verifyOtp,
-        fetchUser,
+        verifyUser,
+        loginUser,
+        fetchProfile,
+        forgotPassword,
+        resetPassword,
+        addProgress,
+        getProgress,
       }}
     >
       {children}
-      <Toaster />
     </UserContext.Provider>
   );
 };
