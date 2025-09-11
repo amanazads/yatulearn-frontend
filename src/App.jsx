@@ -37,7 +37,7 @@ const App = () => {
         <BrowserRouter>
           <Header isAuth={isAuth} />
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={isAuth ? <Home /> : <Login/> } />
             <Route path="/about" element={<About />} />
             <Route path="/courses" element={<Courses />} />
             <Route path="/paper" element={isAuth ? <Paper /> : <Login />} />
