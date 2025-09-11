@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "./api"; // use Axios instance
 import "./roadmapsection.css";
 
 const RoadmapSection = () => {
@@ -15,8 +15,8 @@ const RoadmapSection = () => {
     setRoadmap([]);
 
     try {
-      const { data } = await axios.post("http://localhost:8080/api/roadmap", { skill });
-      setRoadmap(data.roadmap);
+      const { data } = await api.post("/roadmap", { skill }); // use api instance
+      setRoadmap(data.roadmap || []); // default to empty array
     } catch (err) {
       console.error("Error generating roadmap:", err);
       setError(err.response?.data?.message || "Something went wrong. Try again.");
@@ -28,6 +28,7 @@ const RoadmapSection = () => {
   return (
     <div className="roadmap-section">
       <h2>AI Roadmap Generator</h2>
+
       <div className="roadmap-input-container">
         <input
           type="text"
@@ -51,13 +52,22 @@ const RoadmapSection = () => {
         <div className="roadmap-cards-container">
           {roadmap.map((item, index) => (
             <div className="roadmap-card" key={index}>
-              <div className="roadmap-step">{index + 1}. {item.step}</div>
-              <div className="roadmap-platform">
-                Platform:{" "}
-                <a href={item.platformLink} target="_blank" rel="noreferrer" className="roadmap-link">
-                  {item.platform}
-                </a>
+              <div className="roadmap-step">
+                {index + 1}. {item.step}
               </div>
+              {item.platform && item.platformLink && (
+                <div className="roadmap-platform">
+                  Platform:{" "}
+                  <a
+                    href={item.platformLink}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="roadmap-link"
+                  >
+                    {item.platform}
+                  </a>
+                </div>
+              )}
             </div>
           ))}
         </div>
