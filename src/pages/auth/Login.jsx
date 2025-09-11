@@ -7,27 +7,15 @@ import { CourseData } from "../../context/CourseContext";
 const Login = () => {
   const navigate = useNavigate();
   const { btnLoading, loginUser } = UserData();
-  const { fetchMyCourse } = CourseData();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const { fetchMyCourse } = CourseData();
+
   const submitHandler = async (e) => {
     e.preventDefault();
-
-    if (!email || !password) {
-      alert("Please enter both email and password");
-      return;
-    }
-
-    try {
-      await loginUser(email, password, navigate, fetchMyCourse);
-    } catch (err) {
-      console.error("Login failed:", err);
-      alert("Login failed. Please check your credentials.");
-    }
+    await loginUser(email, password, navigate, fetchMyCourse);
   };
-
   return (
     <div className="auth-page">
       <div className="auth-form">
@@ -35,9 +23,7 @@ const Login = () => {
         <form onSubmit={submitHandler}>
           <label htmlFor="email">Email</label>
           <input
-            id="email"
             type="email"
-            placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -45,9 +31,7 @@ const Login = () => {
 
           <label htmlFor="password">Password</label>
           <input
-            id="password"
             type="password"
-            placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -57,7 +41,6 @@ const Login = () => {
             {btnLoading ? "Please Wait..." : "Login"}
           </button>
         </form>
-
         <p>
           Don't have an account? <Link to="/register">Register</Link>
         </p>

@@ -5,52 +5,40 @@ import { server } from "../main";
 const CourseContext = createContext();
 
 export const CourseContextProvider = ({ children }) => {
-  const [courses, setCourses] = useState([]);   // ✅ all courses
-  const [course, setCourse] = useState(null);   // ✅ single course
-  const [mycourse, setMyCourse] = useState([]); // ✅ enrolled courses
+  const [courses, setCourses] = useState([]);
+  const [course, setCourse] = useState([]);
+  const [mycourse, setMyCourse] = useState([]);
 
-  // 🔧 set default axios config once
-  axios.defaults.withCredentials = true;
-
-  // ✅ fetch all courses
   async function fetchCourses() {
     try {
       const { data } = await axios.get(`${server}/api/course/all`);
-      setCourses(data.courses || []);
+
+      setCourses(data.courses);
     } catch (error) {
-      console.error("❌ Failed to fetch courses:", error.response?.data?.message || error.message);
-      setCourses([]);
+      console.log(error);
     }
   }
 
-  // ✅ fetch single course detail
   async function fetchCourse(id) {
-    if (!id) return;
     try {
       const { data } = await axios.get(`${server}/api/course/${id}`);
-      setCourse(data.course || null);
+      setCourse(data.course);
     } catch (error) {
-      console.error("❌ Failed to fetch course:", error.response?.data?.message || error.message);
-      setCourse(null);
+      console.log(error);
     }
   }
 
-  // ✅ fetch my enrolled courses
   async function fetchMyCourse() {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setMyCourse([]);
-      return;
-    }
-
     try {
-      const { data } = await axios.get(`${server}/api/course/mycourse`, {
-        headers: { token },
+      const { data } = await axios.get(`${server}/api/mycourse`, {
+        headers: {
+          token: localStorage.getItem("token"),
+        },
       });
-      setMyCourse(data.courses || []);
+
+      setMyCourse(data.courses);
     } catch (error) {
-      console.error("❌ Failed to fetch my courses:", error.response?.data?.message || error.message);
-      setMyCourse([]);
+      console.log(error);
     }
   }
 
@@ -58,15 +46,14 @@ export const CourseContextProvider = ({ children }) => {
     fetchCourses();
     fetchMyCourse();
   }, []);
-
   return (
     <CourseContext.Provider
       value={{
         courses,
-        course,
-        mycourse,
         fetchCourses,
         fetchCourse,
+        course,
+        mycourse,
         fetchMyCourse,
       }}
     >
