@@ -32,7 +32,7 @@ const Home = () => {
         </svg>
       </div>
 
-      <RoadmapSection />
+{/*       <RoadmapSection /> */}
       <Explore />
     </div>
   );
